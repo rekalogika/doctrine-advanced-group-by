@@ -19,11 +19,14 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 final class GroupingSet implements Item, \IteratorAggregate
 {
     /**
-     * @param list<FieldSet|RollUp|Cube> $items
+     * @var list<FieldSet|RollUp|Cube>
      */
-    public function __construct(
-        private array $items = [],
-    ) {}
+    private array $items = [];
+
+    public function __construct(FieldSet|RollUp|Cube ...$fields)
+    {
+        $this->items = array_values($fields);
+    }
 
     #[\Override]
     public function count(): int
@@ -44,17 +47,6 @@ final class GroupingSet implements Item, \IteratorAggregate
                 ),
             ),
         );
-    }
-
-    public static function create(FieldSet|RollUp|Cube ...$items): self
-    {
-        $groupingSet = new self();
-
-        foreach ($items as $item) {
-            $groupingSet->add($item);
-        }
-
-        return $groupingSet;
     }
 
     #[\Override]
@@ -78,7 +70,7 @@ final class GroupingSet implements Item, \IteratorAggregate
             if ($item instanceof RollUp || $item instanceof Cube) {
                 $item = $item->flatten();
             } else { // instanceof FieldSet
-                $item = self::create($item);
+                $item = new self($item);
             }
 
             foreach ($item as $fieldSet) {

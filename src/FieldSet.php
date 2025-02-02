@@ -19,11 +19,14 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 final class FieldSet implements Item, \IteratorAggregate
 {
     /**
-     * @param list<Field> $fields
+     * @var list<Field>
      */
-    public function __construct(
-        private array $fields = [],
-    ) {}
+    private array $fields = [];
+
+    public function __construct(Field ...$fields)
+    {
+        $this->fields = array_values($fields);
+    }
 
     #[\Override]
     public function count(): int
@@ -44,17 +47,6 @@ final class FieldSet implements Item, \IteratorAggregate
                 ),
             ),
         );
-    }
-
-    public static function create(Field ...$fields): self
-    {
-        $fieldSet = new self();
-
-        foreach ($fields as $field) {
-            $fieldSet->add($field);
-        }
-
-        return $fieldSet;
     }
 
     #[\Override]

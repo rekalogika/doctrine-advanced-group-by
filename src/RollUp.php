@@ -19,11 +19,14 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 final class RollUp implements Item, \IteratorAggregate
 {
     /**
-     * @param list<Field|FieldSet> $fields
+     * @var list<Field|FieldSet>
      */
-    public function __construct(
-        private array $fields = [],
-    ) {}
+    private array $fields = [];
+
+    public function __construct(Field|FieldSet ...$fields)
+    {
+        $this->fields = array_values($fields);
+    }
 
     #[\Override]
     public function count(): int
