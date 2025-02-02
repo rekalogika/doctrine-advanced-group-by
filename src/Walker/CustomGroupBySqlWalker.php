@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy\Walker;
 
+use Doctrine\ORM\Query\AST\DeleteStatement;
 use Doctrine\ORM\Query\AST\GroupByClause;
 use Doctrine\ORM\Query\AST\SelectStatement;
+use Doctrine\ORM\Query\AST\UpdateStatement;
 use Doctrine\ORM\Query\Exec\SingleSelectSqlFinalizer;
 use Doctrine\ORM\Query\Exec\SqlFinalizer;
 use Doctrine\ORM\Query\OutputWalker;
@@ -32,7 +34,7 @@ final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
     public const GROUP_BY = self::class . '::GROUP_BY';
 
     #[\Override]
-    public function getFinalizer($AST): SqlFinalizer
+    public function getFinalizer(DeleteStatement|UpdateStatement|SelectStatement $AST): SqlFinalizer
     {
         if (!$AST instanceof SelectStatement) {
             throw new \RuntimeException('CustomGroupBySqlWalker requires a SelectStatement');
@@ -42,16 +44,16 @@ final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
     }
 
     #[\Override]
-    public function walkSelectStatement(SelectStatement $AST): string
+    public function walkSelectStatement(SelectStatement $selectStatement): string
     {
         // dummy value so that walkGroupByClause can be called
-        $AST->groupByClause = new GroupByClause(['dummy']);
+        $selectStatement->groupByClause = new GroupByClause(['dummy']);
 
-        return parent::walkSelectStatement($AST);
+        return parent::walkSelectStatement($selectStatement);
     }
 
     #[\Override]
-    public function walkGroupByClause($groupByClause): string
+    public function walkGroupByClause(GroupByClause $groupByClause): string
     {
         $groupBy = $this->getQuery()->getHint(self::GROUP_BY);
 

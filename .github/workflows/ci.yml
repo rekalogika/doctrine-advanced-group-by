@@ -17,7 +17,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php: [ '8.2', '8.3', '8.4' ]
-        orm: ['^2.20']
+        orm: ['^3.3']
         dep: [highest,lowest]
 
     name: ${{ matrix.dep }} deps, ORM ${{ matrix.orm }}, PHP ${{ matrix.php }}, ${{ matrix.operating-system }}
