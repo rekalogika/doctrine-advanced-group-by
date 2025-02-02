@@ -10,8 +10,6 @@ parameters:
     paths:
         - src
         - tests
-    excludePaths:
-        - tests/Tests/PlatformFactory.php
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
