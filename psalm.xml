@@ -13,7 +13,6 @@
         <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
-            <file name="tests/Tests/PlatformFactory.php" />
         </ignoreFiles>
     </projectFiles>
 
