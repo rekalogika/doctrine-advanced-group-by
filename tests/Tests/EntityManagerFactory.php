@@ -35,7 +35,7 @@ final class EntityManagerFactory
             'dbname' => 'app',
             'user' => 'app',
             'password' => 'app',
-            'platform' => new PostgreSqlPlatform(),
+            'platform' => new PostgreSQLPlatform(),
         ], $config);
 
         return new EntityManager($connection, $config);
