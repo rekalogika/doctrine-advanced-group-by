@@ -22,11 +22,14 @@ use Rekalogika\DoctrineAdvancedGroupBy\Walker\CustomGroupBySqlWalker;
 final class GroupBy implements \IteratorAggregate, Item
 {
     /**
-     * @param list<Cube|Field|FieldSet|GroupingSet|RollUp> $items
+     * @var list<Cube|Field|FieldSet|GroupingSet|RollUp>
      */
-    public function __construct(
-        private array $items = [],
-    ) {}
+    private array $items = [];
+
+    public function __construct(Cube|Field|FieldSet|GroupingSet|RollUp ...$fields)
+    {
+        $this->items = array_values($fields);
+    }
 
     public function apply(Query $query): void
     {

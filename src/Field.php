@@ -15,9 +15,7 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 
 final readonly class Field implements Item
 {
-    public function __construct(
-        private string $name,
-    ) {}
+    public function __construct(private string $name) {}
 
     #[\Override]
     public function count(): int

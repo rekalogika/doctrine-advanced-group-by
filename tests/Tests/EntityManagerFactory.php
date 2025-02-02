@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Rekalogika\DoctrineAdvancedGroupBy\Tests\Tests;
 
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -35,7 +34,7 @@ final class EntityManagerFactory
             'dbname' => 'app',
             'user' => 'app',
             'password' => 'app',
-            'platform' => new PostgreSQLPlatform(),
+            'platform' => PlatformFactory::getPlatform(),
         ], $config);
 
         return new EntityManager($connection, $config);

@@ -16,16 +16,17 @@ namespace Rekalogika\DoctrineAdvancedGroupBy\Tests\Tests;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Rekalogika\DoctrineAdvancedGroupBy\Cube;
 use Rekalogika\DoctrineAdvancedGroupBy\Field;
 use Rekalogika\DoctrineAdvancedGroupBy\FieldSet;
 use Rekalogika\DoctrineAdvancedGroupBy\GroupBy;
 use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
+use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 use Rekalogika\DoctrineAdvancedGroupBy\Tests\Entity\SomeEntity;
 
 class GroupByTest extends TestCase
 {
     private ?EntityManagerInterface $entityManager = null;
-
     private function getEntityManager(): EntityManagerInterface
     {
         return $this->entityManager ??= (new EntityManagerFactory())->getEntityManager();
@@ -50,9 +51,10 @@ class GroupByTest extends TestCase
             ->select('e.a AS a')
             ->addSelect('e.b AS b');
 
-        $groupBy = (new GroupBy())
-            ->add(new Field('a'))
-            ->add(new Field('b'));
+        $groupBy = new GroupBy(
+            new Field('a'),
+            new Field('b'),
+        );
 
         $query = $queryBuilder->getQuery();
         $groupBy->apply($query);
@@ -72,20 +74,18 @@ class GroupByTest extends TestCase
             ->addSelect('e.c AS c')
             ->addSelect('e.d AS d');
 
-        $groupBy = (new GroupBy())
-            ->add(
-                (new GroupingSet())
-                    ->add(
-                        (new FieldSet())
-                            ->add(new Field('a'))
-                            ->add(new Field('b')),
-                    )
-                    ->add(
-                        (new FieldSet())
-                            ->add(new Field('c'))
-                            ->add(new Field('d')),
-                    ),
-            );
+        $groupBy = new GroupBy(
+            new GroupingSet(
+                new FieldSet(
+                    new Field('a'),
+                    new Field('b'),
+                ),
+                new FieldSet(
+                    new Field('c'),
+                    new Field('d'),
+                ),
+            ),
+        );
 
         $query = $queryBuilder->getQuery();
         $groupBy->apply($query);
@@ -94,5 +94,94 @@ class GroupByTest extends TestCase
             'SELECT s0_.a AS a_0, s0_.b AS b_1, s0_.c AS c_2, s0_.d AS d_3 FROM some_entity s0_ GROUP BY DISTINCT GROUPING SETS((s0_.a, s0_.b), (s0_.c, s0_.d))',
             $query->getSQL(),
         );
+    }
+
+    public function testFieldGroupingSetFlattening(): void
+    {
+        $groupBy1 = new GroupBy(
+            new Field('a'),
+            new GroupingSet(
+                new FieldSet(),
+                new FieldSet(
+                    new Field('b'),
+                ),
+                new FieldSet(
+                    new Field('c'),
+                    new Field('d'),
+                ),
+            ),
+        );
+
+        $groupBy2 = new GroupBy(
+            new GroupingSet(
+                new FieldSet(
+                    new Field('a'),
+                ),
+                new FieldSet(
+                    new Field('a'),
+                    new Field('b'),
+                ),
+                new FieldSet(
+                    new Field('a'),
+                    new Field('c'),
+                    new Field('d'),
+                ),
+            ),
+        );
+
+        $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
+    }
+
+    public function testCubeFlattening(): void
+    {
+        $groupBy1 = new GroupBy(
+            new Cube(
+                new Field('a'),
+                new Field('b'),
+            ),
+        );
+
+        $groupBy2 = new GroupBy(
+            new GroupingSet(
+                new FieldSet(),
+                new FieldSet(
+                    new Field('a'),
+                ),
+                new FieldSet(
+                    new Field('b'),
+                ),
+                new FieldSet(
+                    new Field('a'),
+                    new Field('b'),
+                ),
+            ),
+        );
+
+        $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
+    }
+
+    public function testRollupFlattening(): void
+    {
+        $groupBy1 = new GroupBy(
+            new RollUp(
+                new Field('a'),
+                new Field('b'),
+            ),
+        );
+
+        $groupBy2 = new GroupBy(
+            new GroupingSet(
+                new FieldSet(),
+                new FieldSet(
+                    new Field('a'),
+                ),
+                new FieldSet(
+                    new Field('a'),
+                    new Field('b'),
+                ),
+            ),
+        );
+
+        $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
     }
 }
