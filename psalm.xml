@@ -13,25 +13,11 @@
         <directory name="tests" />
         <ignoreFiles>
             <directory name="vendor" />
+            <file name="tests/Tests/PlatformFactory.php" />
         </ignoreFiles>
     </projectFiles>
 
     <issueHandlers>
-        <MixedAssignment>
-            <errorLevel type="suppress">
-                <file name="tests/Tests/EntityManagerFactory.php" />
-            </errorLevel>
-        </MixedAssignment>
-        <MissingDependency>
-            <errorLevel type="suppress">
-                <file name="tests/Tests/EntityManagerFactory.php" />
-            </errorLevel>
-        </MissingDependency>
-        <MixedArgumentTypeCoercion>
-            <errorLevel type="suppress">
-                <file name="tests/Tests/EntityManagerFactory.php" />
-            </errorLevel>
-        </MixedArgumentTypeCoercion>
     </issueHandlers>
 
     <plugins>

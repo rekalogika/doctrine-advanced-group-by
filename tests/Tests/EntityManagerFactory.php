@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Rekalogika\DoctrineAdvancedGroupBy\Tests\Tests;
 
 use Doctrine\DBAL\DriverManager;
-use Doctrine\DBAL\Platforms\PostgreSQL100Platform;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -29,14 +27,6 @@ final class EntityManagerFactory
             isDevMode: true,
         );
 
-        if (class_exists(PostgreSQLPlatform::class)) {
-            $platform = new PostgreSQLPlatform();
-        } elseif (class_exists(PostgreSQL100Platform::class)) {
-            $platform = new PostgreSQL100Platform();
-        } else {
-            throw new \RuntimeException('No PostgreSQLPlatform found');
-        }
-
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_pgsql',
             'host' => 'localhost',
@@ -44,7 +34,7 @@ final class EntityManagerFactory
             'dbname' => 'app',
             'user' => 'app',
             'password' => 'app',
-            'platform' => $platform,
+            'platform' => PlatformFactory::getPlatform(),
         ], $config);
 
         return new EntityManager($connection, $config);
