@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of rekalogika/analytics package.
+ * This file is part of rekalogika/doctrine-advanced-group-by package.
  *
  * (c) Priyadi Iman Nurcahyo <https://rekalogika.dev>
  *

@@ -10,13 +10,29 @@
         }
     ],
     "type": "library",
-    "require": {
-        "php": "^8.2",
-        "doctrine/orm": "^2.20"
-    },
     "autoload": {
         "psr-4": {
             "Rekalogika\\DoctrineAdvancedGroupBy\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rekalogika\\DoctrineAdvancedGroupBy\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "doctrine/orm": "^2.20",
+        "symfony/cache": "^7.2"
+    },
+    "require-dev": {
+        "ekino/phpstan-banned-code": "^3.0",
+        "phpstan/phpstan": "^2.0",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^11",
+        "psalm/plugin-phpunit": "^0.19",
+        "rector/rector": "^2.0",
+        "vimeo/psalm": "^6.0"
     }
 }

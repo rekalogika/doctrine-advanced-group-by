@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of rekalogika/analytics package.
+ * This file is part of rekalogika/doctrine-advanced-group-by package.
  *
  * (c) Priyadi Iman Nurcahyo <https://rekalogika.dev>
  *
@@ -49,7 +49,7 @@ final class FieldSet implements Item, \IteratorAggregate
         $fieldSet = new self();
 
         foreach ($fields as $field) {
-            $fieldSet->addField($field);
+            $fieldSet->add($field);
         }
 
         return $fieldSet;
@@ -61,7 +61,7 @@ final class FieldSet implements Item, \IteratorAggregate
         return new \ArrayIterator($this->fields);
     }
 
-    public function addField(Field $field): self
+    public function add(Field $field): self
     {
         $this->fields[] = $field;
 
