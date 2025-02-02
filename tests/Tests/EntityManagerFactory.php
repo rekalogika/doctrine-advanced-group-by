@@ -27,6 +27,8 @@ final class EntityManagerFactory
             isDevMode: true,
         );
 
+        $platform = PlatformFactory::getPlatform();
+
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_pgsql',
             'host' => 'localhost',
@@ -34,7 +36,7 @@ final class EntityManagerFactory
             'dbname' => 'app',
             'user' => 'app',
             'password' => 'app',
-            'platform' => PlatformFactory::getPlatform(),
+            'serverVersion' => '17',
         ], $config);
 
         return new EntityManager($connection, $config);
