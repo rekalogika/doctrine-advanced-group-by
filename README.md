@@ -6,6 +6,8 @@ These include `GROUPING SETS`, `CUBE`, and `ROLLUP`.
 If you are not familiar with these clauses, you can read more about them in the
 [PostgreSQL documentation](https://www.postgresql.org/docs/current/queries-table-expressions.html#QUERIES-GROUPING-SETS).
 
+Full documentation is available at [rekalogika.dev/doctrine-advanced-group-by](https://rekalogika.dev/doctrine-advanced-group-by).
+
 ## Supported Databases
 
 Only PostgreSQL is currently supported. MS SQL Server support is possible in the
@@ -94,8 +96,12 @@ to split the query into multiple smaller queries.
 
 ## Limitations
 
-Works using a custom SQL walker; therefore it is not possible if you need to use
+Works using a custom SQL walker; therefore, it is not possible if you need to use
 a custom SQL walker for another purpose.
+
+## Documentation
+
+[rekalogika.dev/doctrine-advanced-group-by](https://rekalogika.dev/doctrine-advanced-group-by)
 
 ## License
 

@@ -1,8 +1,18 @@
 {
     "name": "rekalogika/doctrine-advanced-group-by",
-    "description": "TBD",
+    "description": "Allows the use of the more complex GROUP BY clauses in Doctrine ORM. These include GROUPING SETS, CUBE, and ROLLUP.",
     "homepage": "https://rekalogika.dev/doctrine-advanced-group-by",
     "license": "MIT",
+    "keywords": [
+        "doctrine",
+        "orm",
+        "group by",
+        "grouping sets",
+        "rollup",
+        "cube",
+        "grouping",
+        "postgresql"
+    ],
     "authors": [
         {
             "name": "Priyadi Iman Nurcahyo",
@@ -23,7 +33,7 @@
     "require": {
         "php": "^8.2",
         "doctrine/orm": "^2.20",
-        "symfony/cache": "^7.2"
+        "symfony/cache": "^6.4 || ^7.0"
     },
     "require-dev": {
         "ekino/phpstan-banned-code": "^3.0",
