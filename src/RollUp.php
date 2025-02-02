@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of rekalogika/analytics package.
+ * This file is part of rekalogika/doctrine-advanced-group-by package.
  *
  * (c) Priyadi Iman Nurcahyo <https://rekalogika.dev>
  *
@@ -50,7 +50,7 @@ final class RollUp implements Item, \IteratorAggregate
         return new \ArrayIterator($this->fields);
     }
 
-    public function addField(Field|FieldSet $field): void
+    public function add(Field|FieldSet $field): void
     {
         $this->fields[] = $field;
     }
@@ -68,15 +68,15 @@ final class RollUp implements Item, \IteratorAggregate
 
             foreach ($members as $member) {
                 if ($member instanceof Field) {
-                    $fieldSet->addField($member);
+                    $fieldSet->add($member);
                 } else {
                     foreach ($member as $field) {
-                        $fieldSet->addField($field);
+                        $fieldSet->add($field);
                     }
                 }
             }
 
-            $groupingSet->addItem($fieldSet);
+            $groupingSet->add($fieldSet);
         }
 
         return $groupingSet;

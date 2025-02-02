@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of rekalogika/analytics package.
+ * This file is part of rekalogika/doctrine-advanced-group-by package.
  *
  * (c) Priyadi Iman Nurcahyo <https://rekalogika.dev>
  *
@@ -49,7 +49,7 @@ final class GroupingSet implements Item, \IteratorAggregate
         $groupingSet = new self();
 
         foreach ($items as $item) {
-            $groupingSet->addItem($item);
+            $groupingSet->add($item);
         }
 
         return $groupingSet;
@@ -61,7 +61,7 @@ final class GroupingSet implements Item, \IteratorAggregate
         return new \ArrayIterator($this->items);
     }
 
-    public function addItem(FieldSet|RollUp|Cube $item): self
+    public function add(FieldSet|RollUp|Cube $item): self
     {
         $this->items[] = $item;
 
@@ -91,7 +91,7 @@ final class GroupingSet implements Item, \IteratorAggregate
         $groupingSet = new GroupingSet();
 
         foreach ($fieldSets as $fieldSet) {
-            $groupingSet->addItem($fieldSet);
+            $groupingSet->add($fieldSet);
         }
 
         return $groupingSet;

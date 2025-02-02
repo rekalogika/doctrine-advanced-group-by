@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 /*
- * This file is part of rekalogika/analytics package.
+ * This file is part of rekalogika/doctrine-advanced-group-by package.
  *
  * (c) Priyadi Iman Nurcahyo <https://rekalogika.dev>
  *
@@ -112,7 +112,7 @@ final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
     private function walkCustomGroupByCube(Cube $cube): string
     {
         return
-            ' CUBE('
+            'CUBE('
             . implode(
                 ', ',
                 array_map(
@@ -126,7 +126,7 @@ final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
     private function walkCustomGroupByRollUp(RollUp $rollUp): string
     {
         return
-            ' ROLLUP('
+            'ROLLUP('
             . implode(
                 ', ',
                 array_map(
@@ -140,7 +140,7 @@ final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
     private function walkCustomGroupByGroupingSet(GroupingSet $groupingSet): string
     {
         return
-            ' GROUPING SETS('
+            'GROUPING SETS('
             . implode(
                 ', ',
                 array_map(
