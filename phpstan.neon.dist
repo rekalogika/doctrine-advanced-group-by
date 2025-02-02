@@ -10,6 +10,13 @@ parameters:
     paths:
         - src
         - tests
+    ignoreErrors:
+        -
+            identifier: classConstant.deprecatedClass
+            path: tests/Tests/EntityManagerFactory.php
+        -
+            identifier: new.deprecated
+            path: tests/Tests/EntityManagerFactory.php
 
 includes:
     - vendor/phpstan/phpstan-phpunit/extension.neon
