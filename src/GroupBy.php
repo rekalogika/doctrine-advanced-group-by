@@ -21,6 +21,13 @@ use Rekalogika\DoctrineAdvancedGroupBy\Walker\CustomGroupBySqlWalker;
  */
 final class GroupBy implements \IteratorAggregate, Item
 {
+    /**
+     * @param list<Cube|Field|FieldSet|GroupingSet|RollUp> $items
+     */
+    public function __construct(
+        private array $items = [],
+    ) {}
+
     public function apply(Query $query): void
     {
         $query
@@ -33,11 +40,6 @@ final class GroupBy implements \IteratorAggregate, Item
                 value: $this,
             );
     }
-
-    /**
-     * @var list<Cube|Field|FieldSet|GroupingSet|RollUp>
-     */
-    private array $items = [];
 
     #[\Override]
     public function getSignature(): string

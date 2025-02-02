@@ -19,9 +19,11 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 final class FieldSet implements Item, \IteratorAggregate
 {
     /**
-     * @var list<Field>
+     * @param list<Field> $fields
      */
-    private array $fields = [];
+    public function __construct(
+        private array $fields = [],
+    ) {}
 
     #[\Override]
     public function count(): int

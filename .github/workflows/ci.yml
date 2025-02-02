@@ -2,7 +2,9 @@ name: CI
 
 on:
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - orm2
+      - orm3
 
 permissions:
   contents: read
@@ -15,7 +17,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         php: [ '8.2', '8.3', '8.4' ]
-        orm: ['^2.20', '^3.2']
+        orm: ['^2.20']
         dep: [highest,lowest]
 
     name: ${{ matrix.dep }} deps, ORM ${{ matrix.orm }}, PHP ${{ matrix.php }}, ${{ matrix.operating-system }}
@@ -50,34 +52,17 @@ jobs:
       with:
         dependency-versions: ${{ matrix.dep }}
         composer-options: --prefer-dist --no-progress --no-scripts --ignore-platform-reqs --with=doctrine/orm:${{ matrix.orm }}
-      env:
-        SYMFONY_REQUIRE: ${{ matrix.symfony }}
 
     - name: Run psalm
       run: vendor/bin/psalm
-      if: matrix.dep == 'highest' && matrix.symfony == '7.*'
+      if: matrix.dep == 'highest'
 
     - name: Run phpstan
       run: vendor/bin/phpstan analyse
-      if: matrix.dep == 'highest' && matrix.symfony == '7.*'
-
-    - name: Validate monorepo
-      run: git reset --hard ; vendor/bin/monorepo-builder validate
 
     - name: Validate php-cs-fixer
       run: |
         PHP_CS_FIXER_IGNORE_ENV=1 tools/php-cs-fixer check --allow-risky=yes
-
-    - name: Create schema
-      run: php tests/bin/console doctrine:schema:create --no-interaction
-
-    - name: Load fixtures
-      run: php tests/bin/console doctrine:fixtures:load --no-interaction
-
-    - name: Refresh
-      run: |
-        php tests/bin/console rekalogika:analytics:refresh 'Rekalogika\Analytics\Tests\App\Entity\OrderSummary'
-        php tests/bin/console rekalogika:analytics:refresh 'Rekalogika\Analytics\Tests\App\Entity\CustomerSummary'
 
     - name: Run phpunit
       run: |
