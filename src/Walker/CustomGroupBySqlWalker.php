@@ -15,9 +15,6 @@ namespace Rekalogika\DoctrineAdvancedGroupBy\Walker;
 
 use Doctrine\ORM\Query\AST\GroupByClause;
 use Doctrine\ORM\Query\AST\SelectStatement;
-use Doctrine\ORM\Query\Exec\SingleSelectSqlFinalizer;
-use Doctrine\ORM\Query\Exec\SqlFinalizer;
-use Doctrine\ORM\Query\OutputWalker;
 use Doctrine\ORM\Query\SqlWalker;
 use Rekalogika\DoctrineAdvancedGroupBy\Cube;
 use Rekalogika\DoctrineAdvancedGroupBy\Field;
