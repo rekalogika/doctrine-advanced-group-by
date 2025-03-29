@@ -17,6 +17,11 @@
     </projectFiles>
 
     <issueHandlers>
+        <ClassMustBeFinal>
+            <errorLevel type="suppress">
+                <directory name="tests/Entity" />
+            </errorLevel>
+        </ClassMustBeFinal>
     </issueHandlers>
 
     <plugins>
