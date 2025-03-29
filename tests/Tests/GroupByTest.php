@@ -184,4 +184,25 @@ class GroupByTest extends TestCase
 
         $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
     }
+
+    public function testLimit(): void
+    {
+        $queryBuilder = $this->createQueryBuilder()
+            ->from(SomeEntity::class, 'e')
+            ->select('e.a AS a');
+
+        $groupBy = new GroupBy(
+            new Field('a'),
+        );
+
+        $query = $queryBuilder->getQuery();
+        $groupBy->apply($query);
+        $query->setFirstResult(5);
+        $query->setMaxResults(10);
+
+        $this->assertSame(
+            'SELECT s0_.a AS a_0 FROM some_entity s0_ GROUP BY DISTINCT s0_.a LIMIT 10 OFFSET 5',
+            $query->getSQL(),
+        );
+    }
 }
