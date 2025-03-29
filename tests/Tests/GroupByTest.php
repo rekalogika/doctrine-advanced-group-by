@@ -24,7 +24,7 @@ use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
 use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 use Rekalogika\DoctrineAdvancedGroupBy\Tests\Entity\SomeEntity;
 
-class GroupByTest extends TestCase
+final class GroupByTest extends TestCase
 {
     private ?EntityManagerInterface $entityManager = null;
     private function getEntityManager(): EntityManagerInterface
