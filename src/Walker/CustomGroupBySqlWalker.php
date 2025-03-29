@@ -15,9 +15,6 @@ namespace Rekalogika\DoctrineAdvancedGroupBy\Walker;
 
 use Doctrine\ORM\Query\AST\GroupByClause;
 use Doctrine\ORM\Query\AST\SelectStatement;
-use Doctrine\ORM\Query\Exec\SingleSelectSqlFinalizer;
-use Doctrine\ORM\Query\Exec\SqlFinalizer;
-use Doctrine\ORM\Query\OutputWalker;
 use Doctrine\ORM\Query\SqlWalker;
 use Rekalogika\DoctrineAdvancedGroupBy\Cube;
 use Rekalogika\DoctrineAdvancedGroupBy\Field;
@@ -27,19 +24,9 @@ use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
 use Rekalogika\DoctrineAdvancedGroupBy\Item;
 use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 
-final class CustomGroupBySqlWalker extends SqlWalker implements OutputWalker
+final class CustomGroupBySqlWalker extends SqlWalker
 {
     public const GROUP_BY = self::class . '::GROUP_BY';
-
-    #[\Override]
-    public function getFinalizer($AST): SqlFinalizer
-    {
-        if (!$AST instanceof SelectStatement) {
-            throw new \RuntimeException('CustomGroupBySqlWalker requires a SelectStatement');
-        }
-
-        return new SingleSelectSqlFinalizer($this->walkSelectStatement($AST));
-    }
 
     #[\Override]
     public function walkSelectStatement(SelectStatement $AST): string
