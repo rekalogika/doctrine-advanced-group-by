@@ -43,6 +43,6 @@
         "phpunit/phpunit": "^11",
         "psalm/plugin-phpunit": "^0.19",
         "rector/rector": "^2.0",
-        "vimeo/psalm": "^6.0"
+        "vimeo/psalm": "^6.9"
     }
 }
