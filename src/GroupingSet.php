@@ -14,16 +14,16 @@ declare(strict_types=1);
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
 /**
- * @implements \IteratorAggregate<FieldSet|RollUp|Cube>
+ * @implements \IteratorAggregate<FieldSet|RollUp|Cube|GroupingSet>
  */
 final class GroupingSet implements Item, \IteratorAggregate
 {
     /**
-     * @var list<FieldSet|RollUp|Cube>
+     * @var list<FieldSet|RollUp|Cube|GroupingSet>
      */
     private array $items = [];
 
-    public function __construct(FieldSet|RollUp|Cube ...$fields)
+    public function __construct(FieldSet|RollUp|Cube|GroupingSet ...$fields)
     {
         $this->items = array_values($fields);
     }
@@ -42,7 +42,7 @@ final class GroupingSet implements Item, \IteratorAggregate
             self::class . implode(
                 '',
                 array_map(
-                    fn(FieldSet|RollUp|Cube $item): string => $item->getSignature(),
+                    fn(FieldSet|RollUp|Cube|GroupingSet $item): string => $item->getSignature(),
                     $this->items,
                 ),
             ),
