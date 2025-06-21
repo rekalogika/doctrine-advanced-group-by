@@ -55,7 +55,7 @@ final class GroupingSet implements Item, \IteratorAggregate
         return new \ArrayIterator($this->items);
     }
 
-    public function add(FieldSet|RollUp|Cube $item): self
+    public function add(FieldSet|RollUp|Cube|GroupingSet $item): self
     {
         $this->items[] = $item;
 
