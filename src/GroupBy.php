@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
 use Doctrine\ORM\Query;
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
 use Rekalogika\DoctrineAdvancedGroupBy\Walker\CustomGroupBySqlWalker;
 
 /**
@@ -29,6 +30,12 @@ final class GroupBy implements \IteratorAggregate, Item
     public function __construct(Cube|Field|FieldSet|GroupingSet|RollUp ...$fields)
     {
         $this->items = array_values($fields);
+    }
+
+    #[\Override]
+    public function accept(Visitor $visitor): void
+    {
+        $visitor->visitGroupBy($this);
     }
 
     public function apply(Query $query): void
