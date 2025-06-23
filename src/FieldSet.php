@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
+
 /**
  * @implements \IteratorAggregate<Field>
  */
@@ -27,6 +29,13 @@ final class FieldSet implements Item, \IteratorAggregate
     {
         $this->fields = array_values($fields);
     }
+
+    #[\Override]
+    public function accept(Visitor $visitor): void
+    {
+        $visitor->visitFieldSet($this);
+    }
+
 
     #[\Override]
     public function count(): int

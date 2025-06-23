@@ -13,7 +13,11 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
+
 interface Item extends \Countable
 {
     public function getSignature(): string;
+
+    public function accept(Visitor $visitor): void;
 }
