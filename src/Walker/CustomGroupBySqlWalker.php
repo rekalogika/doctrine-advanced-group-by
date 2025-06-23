@@ -93,7 +93,7 @@ final class CustomGroupBySqlWalker extends SqlWalker
 
     private function walkCustomGroupByField(Field $field): string
     {
-        return $this->walkGroupByItem($field->getName());
+        return $this->walkGroupByItem($field->getContent());
     }
 
     private function walkCustomGroupByCube(Cube $cube): string
