@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
+
 /**
  * @implements \IteratorAggregate<FieldSet|RollUp|Cube|GroupingSet>
  */
@@ -26,6 +28,12 @@ final class GroupingSet implements Item, \IteratorAggregate
     public function __construct(FieldSet|RollUp|Cube|GroupingSet ...$fields)
     {
         $this->items = array_values($fields);
+    }
+
+    #[\Override]
+    public function accept(Visitor $visitor): void
+    {
+        $visitor->visitGroupingSets($this);
     }
 
     #[\Override]

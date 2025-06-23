@@ -13,9 +13,17 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
+
 final readonly class Field implements Item
 {
-    public function __construct(private string $name) {}
+    public function __construct(private string $content) {}
+
+    #[\Override]
+    public function accept(Visitor $visitor): void
+    {
+        $visitor->visitField($this);
+    }
 
     #[\Override]
     public function count(): int
@@ -26,11 +34,19 @@ final readonly class Field implements Item
     #[\Override]
     public function getSignature(): string
     {
-        return hash('xxh128', self::class . $this->name);
+        return hash('xxh128', self::class . $this->content);
     }
 
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    /**
+     * @deprecated Use getContent() instead.
+     */
     public function getName(): string
     {
-        return $this->name;
+        return $this->content;
     }
 }

@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy;
 
+use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
+
 /**
  * @implements \IteratorAggregate<Field|FieldSet>
  */
@@ -26,6 +28,12 @@ final class Cube implements Item, \IteratorAggregate
     public function __construct(Field|FieldSet ...$fields)
     {
         $this->fields = array_values($fields);
+    }
+
+    #[\Override]
+    public function accept(Visitor $visitor): void
+    {
+        $visitor->visitCube($this);
     }
 
     #[\Override]
