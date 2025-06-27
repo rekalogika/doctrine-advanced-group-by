@@ -20,48 +20,64 @@ use Rekalogika\DoctrineAdvancedGroupBy\GroupBy;
 use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
 use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 
+/**
+ * @implements Visitor<null>
+ */
 abstract class AbstractVisitor implements Visitor
 {
     #[\Override]
-    public function visitGroupBy(GroupBy $groupBy): void
+    public function visitGroupBy(GroupBy $groupBy): mixed
     {
         foreach ($groupBy as $item) {
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitFieldSet(FieldSet $fieldSet): void
+    public function visitFieldSet(FieldSet $fieldSet): mixed
     {
         foreach ($fieldSet as $item) {
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitField(Field $field): void {}
+    public function visitField(Field $field): mixed
+    {
+        return null;
+    }
 
     #[\Override]
-    public function visitCube(Cube $cube): void
+    public function visitCube(Cube $cube): mixed
     {
         foreach ($cube as $item) {
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitRollUp(RollUp $rollUp): void
+    public function visitRollUp(RollUp $rollUp): mixed
     {
         foreach ($rollUp as $item) {
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitGroupingSets(GroupingSet $groupingSet): void
+    public function visitGroupingSets(GroupingSet $groupingSet): mixed
     {
         foreach ($groupingSet as $item) {
             $item->accept($this);
         }
+
+        return null;
     }
 }
