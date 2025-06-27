@@ -31,9 +31,9 @@ final class FieldSet implements Item, \IteratorAggregate
     }
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitFieldSet($this);
+        return $visitor->visitFieldSet($this);
     }
 
 

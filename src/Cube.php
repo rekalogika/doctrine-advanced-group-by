@@ -31,9 +31,9 @@ final class Cube implements Item, \IteratorAggregate
     }
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitCube($this);
+        return $visitor->visitCube($this);
     }
 
     #[\Override]
