@@ -33,9 +33,9 @@ final class GroupBy implements \IteratorAggregate, Item
     }
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitGroupBy($this);
+        return $visitor->visitGroupBy($this);
     }
 
     public function apply(Query $query): void

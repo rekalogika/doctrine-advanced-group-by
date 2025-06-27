@@ -31,9 +31,9 @@ final class RollUp implements Item, \IteratorAggregate
     }
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitRollUp($this);
+        return $visitor->visitRollUp($this);
     }
 
     #[\Override]
