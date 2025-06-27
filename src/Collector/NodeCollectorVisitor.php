@@ -26,7 +26,7 @@ final class NodeCollectorVisitor extends AbstractVisitor
     public function __construct(private readonly NodeCollector $collector) {}
 
     #[\Override]
-    public function visitGroupBy(GroupBy $groupBy): void
+    public function visitGroupBy(GroupBy $groupBy): null
     {
         $this->collector->add($groupBy, null);
 
@@ -34,44 +34,57 @@ final class NodeCollectorVisitor extends AbstractVisitor
             $this->collector->add($item, $groupBy);
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitFieldSet(FieldSet $fieldSet): void
+    public function visitFieldSet(FieldSet $fieldSet): null
     {
         foreach ($fieldSet as $item) {
             $this->collector->add($item, $fieldSet);
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitField(Field $field): void {}
+    public function visitField(Field $field): null
+    {
+        return null;
+    }
 
     #[\Override]
-    public function visitCube(Cube $cube): void
+    public function visitCube(Cube $cube): null
     {
         foreach ($cube as $item) {
             $this->collector->add($item, $cube);
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitRollUp(RollUp $rollUp): void
+    public function visitRollUp(RollUp $rollUp): null
     {
         foreach ($rollUp as $item) {
             $this->collector->add($item, $rollUp);
             $item->accept($this);
         }
+
+        return null;
     }
 
     #[\Override]
-    public function visitGroupingSets(GroupingSet $groupingSet): void
+    public function visitGroupingSets(GroupingSet $groupingSet): null
     {
         foreach ($groupingSet as $item) {
             $this->collector->add($item, $groupingSet);
             $item->accept($this);
         }
+
+        return null;
     }
 }

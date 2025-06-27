@@ -16,6 +16,10 @@ namespace Rekalogika\DoctrineAdvancedGroupBy;
 use Rekalogika\DoctrineAdvancedGroupBy\Visitor\Visitor;
 
 /**
+ * Represents a GROUPING SETS clause in a SQL query. The class name is
+ * unfortunately a misnomer, as it should have been named `GroupingSets`
+ * instead.
+ *
  * @implements \IteratorAggregate<FieldSet|RollUp|Cube|GroupingSet>
  */
 final class GroupingSet implements Item, \IteratorAggregate
@@ -31,9 +35,9 @@ final class GroupingSet implements Item, \IteratorAggregate
     }
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitGroupingSets($this);
+        return $visitor->visitGroupingSets($this);
     }
 
     #[\Override]

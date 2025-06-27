@@ -20,17 +20,38 @@ use Rekalogika\DoctrineAdvancedGroupBy\GroupBy;
 use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
 use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 
+/**
+ * @template T
+ */
 interface Visitor
 {
-    public function visitGroupBy(GroupBy $groupBy): void;
+    /**
+     * @return T
+     */
+    public function visitGroupBy(GroupBy $groupBy): mixed;
 
-    public function visitFieldSet(FieldSet $fieldSet): void;
+    /**
+     * @return T
+     */
+    public function visitFieldSet(FieldSet $fieldSet): mixed;
 
-    public function visitField(Field $field): void;
+    /**
+     * @return T
+     */
+    public function visitField(Field $field): mixed;
 
-    public function visitCube(Cube $cube): void;
+    /**
+     * @return T
+     */
+    public function visitCube(Cube $cube): mixed;
 
-    public function visitRollUp(RollUp $rollUp): void;
+    /**
+     * @return T
+     */
+    public function visitRollUp(RollUp $rollUp): mixed;
 
-    public function visitGroupingSets(GroupingSet $groupingSet): void;
+    /**
+     * @return T
+     */
+    public function visitGroupingSets(GroupingSet $groupingSet): mixed;
 }

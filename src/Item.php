@@ -19,5 +19,10 @@ interface Item extends \Countable
 {
     public function getSignature(): string;
 
-    public function accept(Visitor $visitor): void;
+    /**
+     * @template T
+     * @param Visitor<T> $visitor
+     * @return T
+     */
+    public function accept(Visitor $visitor): mixed;
 }

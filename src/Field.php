@@ -20,9 +20,9 @@ final readonly class Field implements Item
     public function __construct(private string $content) {}
 
     #[\Override]
-    public function accept(Visitor $visitor): void
+    public function accept(Visitor $visitor): mixed
     {
-        $visitor->visitField($this);
+        return $visitor->visitField($this);
     }
 
     #[\Override]
