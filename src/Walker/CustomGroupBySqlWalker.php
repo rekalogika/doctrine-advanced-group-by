@@ -29,12 +29,12 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
     public const GROUP_BY = self::class . '::GROUP_BY';
 
     #[\Override]
-    protected function createSqlForFinalizer(SelectStatement $selectStatement): string
+    protected function createSqlForFinalizer(SelectStatement $AST): string
     {
         // dummy value so that walkGroupByClause will be called
-        $selectStatement->groupByClause = new GroupByClause(['dummy']);
+        $AST->groupByClause = new GroupByClause(['dummy']);
 
-        return parent::createSqlForFinalizer($selectStatement);
+        return parent::createSqlForFinalizer($AST);
     }
 
     #[\Override]
