@@ -15,7 +15,7 @@ namespace Rekalogika\DoctrineAdvancedGroupBy\Walker;
 
 use Doctrine\ORM\Query\AST\GroupByClause;
 use Doctrine\ORM\Query\AST\SelectStatement;
-use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\SqlOutputWalker;
 use Rekalogika\DoctrineAdvancedGroupBy\Cube;
 use Rekalogika\DoctrineAdvancedGroupBy\Field;
 use Rekalogika\DoctrineAdvancedGroupBy\FieldSet;
@@ -24,17 +24,17 @@ use Rekalogika\DoctrineAdvancedGroupBy\GroupingSet;
 use Rekalogika\DoctrineAdvancedGroupBy\Item;
 use Rekalogika\DoctrineAdvancedGroupBy\RollUp;
 
-final class CustomGroupBySqlWalker extends SqlWalker
+final class CustomGroupBySqlWalker extends SqlOutputWalker
 {
     public const GROUP_BY = self::class . '::GROUP_BY';
 
     #[\Override]
-    public function walkSelectStatement(SelectStatement $AST): string
+    protected function createSqlForFinalizer(SelectStatement $AST): string
     {
-        // dummy value so that walkGroupByClause can be called
+        // dummy value so that walkGroupByClause will be called
         $AST->groupByClause = new GroupByClause(['dummy']);
 
-        return parent::walkSelectStatement($AST);
+        return parent::createSqlForFinalizer($AST);
     }
 
     #[\Override]
@@ -43,7 +43,7 @@ final class CustomGroupBySqlWalker extends SqlWalker
         $groupBy = $this->getQuery()->getHint(self::GROUP_BY);
 
         if (!$groupBy instanceof GroupBy) {
-            throw new \RuntimeException('RollupSqlWalker requires a GroupBy hint');
+            throw new \RuntimeException('CustomGroupBySqlWalker requires a GroupBy hint');
         }
 
         return $this->walkCustomGroupByClause($groupBy);
