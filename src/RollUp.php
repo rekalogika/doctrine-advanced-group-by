@@ -30,6 +30,14 @@ final class RollUp implements Item, \IteratorAggregate
         $this->fields = array_values($fields);
     }
 
+    public function __clone()
+    {
+        $this->fields = array_map(
+            fn(Field|FieldSet $field): Field|FieldSet => clone $field,
+            $this->fields,
+        );
+    }
+
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {

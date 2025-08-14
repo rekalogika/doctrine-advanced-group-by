@@ -34,6 +34,14 @@ final class GroupingSet implements Item, \IteratorAggregate
         $this->items = array_values($fields);
     }
 
+    public function __clone()
+    {
+        $this->items = array_map(
+            fn(FieldSet|RollUp|Cube|GroupingSet $item): FieldSet|RollUp|Cube|GroupingSet => clone $item,
+            $this->items,
+        );
+    }
+
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
