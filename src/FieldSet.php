@@ -30,6 +30,14 @@ final class FieldSet implements Item, \IteratorAggregate
         $this->fields = array_values($fields);
     }
 
+    public function __clone()
+    {
+        $this->fields = array_map(
+            fn(Field $field): Field => clone $field,
+            $this->fields,
+        );
+    }
+
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {

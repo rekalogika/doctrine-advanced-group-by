@@ -32,6 +32,14 @@ final class GroupBy implements \IteratorAggregate, Item
         $this->items = array_values($fields);
     }
 
+    public function __clone()
+    {
+        $this->items = array_map(
+            fn(Cube|Field|FieldSet|GroupingSet|RollUp $item): Cube|Field|FieldSet|GroupingSet|RollUp => clone $item,
+            $this->items,
+        );
+    }
+
     #[\Override]
     public function accept(Visitor $visitor): mixed
     {
