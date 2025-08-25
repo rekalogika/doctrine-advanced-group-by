@@ -94,6 +94,33 @@ This is useful if you need to know if the `GroupBy` generates more than
 4096 grouping sets, which is the limit of the database. Or, you can use it
 to split the query into multiple smaller queries.
 
+## GROUPING() DQL Function
+
+If you are using `ROLLUP`, `CUBE`, or `GROUPING SETS`, you also probably need to
+use the `GROUPING()` function. This package provides a DQL function for the
+`GROUPING()` function that you can use in a DQL `Query` or `QueryBuilder`.
+
+Registration without framework:
+
+```php
+use Doctrine\ORM\Configuration;
+use Rekalogika\DoctrineAdvancedGroupBy\Function\GroupingFunction;
+
+$configuration = new Configuration();
+$configuration->addCustomNumericFunction('GROUPING', GroupingFunction::class);
+```
+
+Registration with Symfony:
+
+```yaml
+# config/packages/doctrine.yaml
+doctrine:
+    orm:
+        dql:
+            numeric_functions:
+                GROUPING: Rekalogika\DoctrineAdvancedGroupBy\Function\GroupingFunction
+```
+
 ## Limitations
 
 Works using a custom SQL walker; therefore, it is not possible if you need to use
