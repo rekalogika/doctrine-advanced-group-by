@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
-        php: [ '8.2', '8.3', '8.4' ]
+        php: [ '8.2', '8.3', '8.4', '8.5' ]
         orm: ['^3.3']
         dep: [highest,lowest]
 
@@ -59,7 +59,7 @@ jobs:
 
     - name: Run psalm
       run: vendor/bin/psalm
-      if: matrix.dep == 'highest'
+      if: matrix.dep == 'highest' && matrix.php != '8.5'
 
     - name: Run phpstan
       run: vendor/bin/phpstan analyse
