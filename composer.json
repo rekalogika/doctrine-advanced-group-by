@@ -33,7 +33,7 @@
     "require": {
         "php": "^8.2",
         "doctrine/orm": "^3.3",
-        "symfony/cache": "^6.4 || ^7.0"
+        "symfony/cache": "^6.4 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "ekino/phpstan-banned-code": "^3.0",
