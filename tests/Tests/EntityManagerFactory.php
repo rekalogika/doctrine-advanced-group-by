@@ -27,6 +27,12 @@ final class EntityManagerFactory
             isDevMode: true,
         );
 
+        // enableNativeLazyObjects() is only available in ORM 3.4+
+        // @phpstan-ignore function.alreadyNarrowedType
+        if (\PHP_VERSION_ID >= 80400 && method_exists($config, 'enableNativeLazyObjects')) {
+            $config->enableNativeLazyObjects(true);
+        }
+
         $connection = DriverManager::getConnection([
             'driver' => 'pdo_pgsql',
             'host' => 'localhost',
