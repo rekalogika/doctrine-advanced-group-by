@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Rekalogika\DoctrineAdvancedGroupBy\Tests\Tests;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Rekalogika\DoctrineAdvancedGroupBy\Cube;
 use Rekalogika\DoctrineAdvancedGroupBy\Field;
@@ -24,9 +25,7 @@ use Rekalogika\DoctrineAdvancedGroupBy\SqlRenderer\SqlRenderer;
 
 final class SqlTest extends TestCase
 {
-    /**
-     * @dataProvider sqlProvider
-     */
+    #[DataProvider('sqlProvider')]
     public function testSqlRendering(GroupBy $groupBy, string $expected): void
     {
         $sqlRenderer = new SqlRenderer();
