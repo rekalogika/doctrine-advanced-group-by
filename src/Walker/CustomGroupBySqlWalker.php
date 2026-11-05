@@ -28,11 +28,19 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
 {
     public const GROUP_BY = self::class . '::GROUP_BY';
 
+    /**
+     * Placeholder clause installed on the top-level SELECT statement so that
+     * walkGroupByClause() is invoked. Only this instance is replaced by the
+     * custom GROUP BY; any other clause (e.g. a GROUP BY inside a subselect)
+     * is rendered normally.
+     */
+    private ?GroupByClause $placeholder = null;
+
     #[\Override]
     protected function createSqlForFinalizer(SelectStatement $selectStatement): string
     {
-        // dummy value so that walkGroupByClause will be called
-        $selectStatement->groupByClause = new GroupByClause(['dummy']);
+        $this->placeholder = new GroupByClause([]);
+        $selectStatement->groupByClause = $this->placeholder;
 
         return parent::createSqlForFinalizer($selectStatement);
     }
@@ -40,6 +48,10 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
     #[\Override]
     public function walkGroupByClause(GroupByClause $groupByClause): string
     {
+        if ($groupByClause !== $this->placeholder) {
+            return parent::walkGroupByClause($groupByClause);
+        }
+
         $groupBy = $this->getQuery()->getHint(self::GROUP_BY);
 
         if (!$groupBy instanceof GroupBy) {
