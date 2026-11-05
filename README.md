@@ -10,9 +10,10 @@ Full documentation is available at [rekalogika.dev/doctrine-advanced-group-by](h
 
 ## Supported Databases
 
-Only PostgreSQL is currently supported. MS SQL Server support is possible in the
-future. Other Doctrine-supported databases do not have the functionality and
-cannot be supported, at least not completely.
+Only PostgreSQL is currently supported. The generated SQL uses
+`GROUP BY DISTINCT`, which requires PostgreSQL 14 or later. MS SQL Server
+support is possible in the future. Other Doctrine-supported databases do not
+have the functionality and cannot be supported, at least not completely.
 
 ## Installation
 
