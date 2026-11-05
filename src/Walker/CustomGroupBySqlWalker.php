@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Rekalogika\DoctrineAdvancedGroupBy\Walker;
 
 use Doctrine\ORM\Query\AST\GroupByClause;
+use Doctrine\ORM\Query\AST\PathExpression;
 use Doctrine\ORM\Query\AST\SelectStatement;
 use Doctrine\ORM\Query\SqlOutputWalker;
 use Rekalogika\DoctrineAdvancedGroupBy\Cube;
@@ -36,9 +37,17 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
      */
     private ?GroupByClause $placeholder = null;
 
+    /**
+     * The GROUP BY clause written in DQL, if any. Its items are emitted in
+     * front of the custom GROUP BY items instead of being discarded.
+     */
+    private ?GroupByClause $dqlGroupByClause = null;
+
     #[\Override]
     protected function createSqlForFinalizer(SelectStatement $AST): string
     {
+        $this->dqlGroupByClause = $AST->groupByClause;
+
         $this->placeholder = new GroupByClause([]);
         $AST->groupByClause = $this->placeholder;
 
@@ -58,19 +67,28 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
             throw new \RuntimeException('CustomGroupBySqlWalker requires a GroupBy hint');
         }
 
-        return $this->walkCustomGroupByClause($groupBy);
+        return $this->walkCustomGroupByClause($groupBy, $this->dqlGroupByClause);
     }
 
-    public function walkCustomGroupByClause(GroupBy $groupBy): string
-    {
-        return ' GROUP BY DISTINCT '
-            . implode(
-                ', ',
-                array_map(
-                    $this->walkCustomGroupByItem(...),
-                    iterator_to_array($groupBy),
-                ),
-            );
+    public function walkCustomGroupByClause(
+        GroupBy $groupBy,
+        ?GroupByClause $dqlGroupByClause = null,
+    ): string {
+        $sqlParts = [];
+
+        foreach ($dqlGroupByClause->groupByItems ?? [] as $groupByItem) {
+            if (!\is_string($groupByItem) && !$groupByItem instanceof PathExpression) {
+                throw new \RuntimeException('Unsupported DQL GROUP BY item');
+            }
+
+            $sqlParts[] = $this->walkGroupByItem($groupByItem);
+        }
+
+        foreach ($groupBy as $item) {
+            $sqlParts[] = $this->walkCustomGroupByItem($item);
+        }
+
+        return ' GROUP BY DISTINCT ' . implode(', ', $sqlParts);
     }
 
     private function walkCustomGroupByItem(Item $item): string
