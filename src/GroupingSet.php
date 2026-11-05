@@ -87,10 +87,10 @@ final class GroupingSet implements Item, \IteratorAggregate
         $fieldSets = [];
 
         foreach ($this->items as $item) {
-            if ($item instanceof RollUp || $item instanceof Cube) {
-                $item = $item->flatten();
-            } else { // instanceof FieldSet
+            if ($item instanceof FieldSet) {
                 $item = new self($item);
+            } else { // RollUp, Cube, or nested GroupingSet
+                $item = $item->flatten();
             }
 
             foreach ($item as $fieldSet) {
