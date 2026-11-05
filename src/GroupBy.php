@@ -116,15 +116,30 @@ final class GroupBy implements \IteratorAggregate, Item
 
         $results = $this->generateCombinations($items);
 
-        $groupingSet = new GroupingSet();
+        /** @var array<string,FieldSet> $fieldSets */
+        $fieldSets = [];
 
         foreach ($results as $result) {
             $fieldSet = new FieldSet();
+            $seen = [];
 
             foreach ($result as $item) {
+                // a field repeated within one grouping set is redundant
+                if (isset($seen[$item->getSignature()])) {
+                    continue;
+                }
+
+                $seen[$item->getSignature()] = true;
                 $fieldSet->add($item);
             }
 
+            // identical grouping sets are redundant
+            $fieldSets[$fieldSet->getSignature()] = $fieldSet;
+        }
+
+        $groupingSet = new GroupingSet();
+
+        foreach ($fieldSets as $fieldSet) {
             $groupingSet->add($fieldSet);
         }
 

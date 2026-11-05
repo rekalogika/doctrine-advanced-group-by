@@ -173,6 +173,34 @@ final class GroupByTest extends TestCase
         $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
     }
 
+    public function testFlatteningRemovesDuplicates(): void
+    {
+        $groupBy1 = new GroupBy(
+            new Field('a'),
+            new Cube(
+                new Field('a'),
+                new Field('b'),
+            ),
+            new Cube(
+                new Field('b'),
+            ),
+        );
+
+        $groupBy2 = new GroupBy(
+            new GroupingSet(
+                new FieldSet(
+                    new Field('a'),
+                    new Field('b'),
+                ),
+                new FieldSet(
+                    new Field('a'),
+                ),
+            ),
+        );
+
+        $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
+    }
+
     public function testCubeFlattening(): void
     {
         $groupBy1 = new GroupBy(
