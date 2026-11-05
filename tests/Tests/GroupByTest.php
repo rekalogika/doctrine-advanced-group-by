@@ -65,6 +65,29 @@ final class GroupByTest extends TestCase
         );
     }
 
+    public function testIdentificationVariableField(): void
+    {
+        $queryBuilder = $this->createQueryBuilder()
+            ->from(SomeEntity::class, 'e')
+            ->select('e.id AS id')
+            ->addSelect('e.a AS a');
+
+        $groupBy = new GroupBy(
+            new Field('a'),
+            new Cube(
+                new Field('e'),
+            ),
+        );
+
+        $query = $queryBuilder->getQuery();
+        $groupBy->apply($query);
+
+        $this->assertSame(
+            'SELECT s0_.id AS id_0, s0_.a AS a_1 FROM some_entity s0_ GROUP BY DISTINCT s0_.a, CUBE((s0_.id, s0_.a, s0_.b, s0_.c, s0_.d, s0_.e, s0_.f, s0_.g, s0_.h, s0_.i, s0_.j))',
+            $query->getSQL(),
+        );
+    }
+
     public function testGroupingSet(): void
     {
         $queryBuilder = $this->createQueryBuilder()

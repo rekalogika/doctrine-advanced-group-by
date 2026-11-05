@@ -105,7 +105,26 @@ final class CustomGroupBySqlWalker extends SqlOutputWalker
 
     private function walkCustomGroupByField(Field $field): string
     {
-        return $this->walkGroupByItem($field->getContent());
+        $content = $field->getContent();
+        $sql = $this->walkGroupByItem($content);
+
+        // An identification variable expands to every column of the entity.
+        // Wrap them so that they form a single grouping expression (e.g. one
+        // CUBE or ROLLUP dimension) instead of one dimension per column.
+        if ($this->isIdentificationVariable($content)) {
+            return '(' . $sql . ')';
+        }
+
+        return $sql;
+    }
+
+    private function isIdentificationVariable(string $name): bool
+    {
+        $queryComponent = $this->getQueryComponents()[$name] ?? null;
+
+        return $queryComponent !== null
+            && isset($queryComponent['metadata'])
+            && !isset($queryComponent['resultVariable']);
     }
 
     private function walkCustomGroupByCube(Cube $cube): string
