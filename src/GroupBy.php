@@ -29,7 +29,9 @@ final class GroupBy implements \IteratorAggregate, Item
 
     public function __construct(Cube|Field|FieldSet|GroupingSet|RollUp ...$fields)
     {
-        $this->items = array_values($fields);
+        foreach ($fields as $field) {
+            $this->add($field);
+        }
     }
 
     public function __clone()
@@ -88,7 +90,10 @@ final class GroupBy implements \IteratorAggregate, Item
 
     public function add(Cube|Field|FieldSet|GroupingSet|RollUp $item): self
     {
-        if (\count($item) === 0) {
+        // An empty FieldSet is the valid grand-total grouping set "()". An
+        // empty CUBE, ROLLUP, or GROUPING SETS is not valid SQL and does not
+        // contribute anything, so it is skipped.
+        if (!$item instanceof FieldSet && \count($item) === 0) {
             return $this;
         }
 
