@@ -23,7 +23,7 @@ final class EntityManagerFactory
     public function getEntityManager(): EntityManagerInterface
     {
         $config = ORMSetup::createAttributeMetadataConfiguration(
-            paths: [__DIR__ . '../Entity'],
+            paths: [__DIR__ . '/../Entity'],
             isDevMode: true,
         );
 
