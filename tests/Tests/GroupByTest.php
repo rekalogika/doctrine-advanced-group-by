@@ -246,6 +246,31 @@ final class GroupByTest extends TestCase
         );
     }
 
+    public function testDqlGroupByIsPreserved(): void
+    {
+        $queryBuilder = $this->createQueryBuilder()
+            ->from(SomeEntity::class, 'e')
+            ->select('e.a AS a')
+            ->addSelect('e.b AS b')
+            ->addSelect('e.c AS c')
+            ->groupBy('e.b')
+            ->addGroupBy('c');
+
+        $groupBy = new GroupBy(
+            new Cube(
+                new Field('a'),
+            ),
+        );
+
+        $query = $queryBuilder->getQuery();
+        $groupBy->apply($query);
+
+        $this->assertSame(
+            'SELECT s0_.a AS a_0, s0_.b AS b_1, s0_.c AS c_2 FROM some_entity s0_ GROUP BY DISTINCT s0_.b, s0_.c, CUBE(s0_.a)',
+            $query->getSQL(),
+        );
+    }
+
     public function testLimit(): void
     {
         $queryBuilder = $this->createQueryBuilder()
