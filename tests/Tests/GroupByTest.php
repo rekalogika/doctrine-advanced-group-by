@@ -185,6 +185,26 @@ final class GroupByTest extends TestCase
         $this->assertEqualsCanonicalizing($groupBy2, $groupBy1->flatten());
     }
 
+    public function testSubselectGroupByIsPreserved(): void
+    {
+        $queryBuilder = $this->createQueryBuilder()
+            ->from(SomeEntity::class, 'e')
+            ->select('e.a AS a')
+            ->where('e.b IN (SELECT e2.b FROM ' . SomeEntity::class . ' e2 GROUP BY e2.b)');
+
+        $groupBy = new GroupBy(
+            new Field('a'),
+        );
+
+        $query = $queryBuilder->getQuery();
+        $groupBy->apply($query);
+
+        $this->assertSame(
+            'SELECT s0_.a AS a_0 FROM some_entity s0_ WHERE s0_.b IN (SELECT s1_.b FROM some_entity s1_ GROUP BY s1_.b) GROUP BY DISTINCT s0_.a',
+            $query->getSQL(),
+        );
+    }
+
     public function testLimit(): void
     {
         $queryBuilder = $this->createQueryBuilder()
