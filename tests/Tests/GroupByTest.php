@@ -96,6 +96,33 @@ final class GroupByTest extends TestCase
         );
     }
 
+    public function testEmptyFieldSet(): void
+    {
+        $queryBuilder = $this->createQueryBuilder()
+            ->from(SomeEntity::class, 'e')
+            ->select('COUNT(e.id) AS cnt');
+
+        $groupBy = (new GroupBy())
+            ->add(new FieldSet())
+            ->add(new Cube())
+            ->add(new RollUp())
+            ->add(new GroupingSet());
+
+        $this->assertEquals(new GroupBy(new FieldSet()), $groupBy);
+        $this->assertEquals(
+            $groupBy,
+            new GroupBy(new FieldSet(), new Cube(), new RollUp(), new GroupingSet()),
+        );
+
+        $query = $queryBuilder->getQuery();
+        $groupBy->apply($query);
+
+        $this->assertSame(
+            'SELECT COUNT(s0_.id) AS sclr_0 FROM some_entity s0_ GROUP BY DISTINCT ()',
+            $query->getSQL(),
+        );
+    }
+
     public function testFieldGroupingSetFlattening(): void
     {
         $groupBy1 = new GroupBy(
